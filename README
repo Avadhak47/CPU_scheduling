@@ -1,0 +1,109 @@
+CPU Scheduling Algorithm Simulator in C++
+
+Avadhesh Kumar
+CSE SoE, JNU
+
+This program as stated in the Title is an Simulator that gives you the an idea,
+how should process in a CPU schedule/execute according a particular alorithm choosen.
+And as the assignment says it randomly allocte cpubrust arrival and other inputs.
+
+In this program there are 9 different class datastructure and these as follow:
+
+1)table:    So Table is use to store process status before printing them into the status.txt
+            file. In table there are two data member Id(id of process) and its satus as a string.
+
+2)tableNode:As there are around 1500-2000 context switch in CPU scheduling for 1000ms, so we
+            store these status(context switch) in a array of linkedList. And these TableNode 
+            are the class for defining the linkedList Node, having datamember as usually like
+            a linkedList node which of a table datatype, and to pointer next and previous 
+            making it a doublly Linked List.
+
+3)TableList:This class is for implementation of doublly linked list of tablenode, it have size(int),
+            millisecond(int store the millisecond which these context switch happen in ll),
+            head(tablenode pointer), tail(tablenode pointer) as its datamember sand dunction to 
+            implementation of ll.
+
+4)process:  This is for defining a process it contain Process Id, arrival, Brust, completion,
+            Turn Around Time, Waiting, Response time and remaining time, IObound(is process 
+            need IO), IOstart(time at which IO call), and memeber function.
+
+5)Process_Creator:  This class is used to create a array of process to store them for later
+            smoother ruuning of program and printing process data in process.txt. it just 
+            have a double pointer to process to store the pointer of the head of pointer
+            array of process, and integer to store size of array. Process_Creator is a 
+            friend class of process. 
+
+6)ReadyQueueNode:   For Simulating and making a database for ready process this class is 
+            used it implement minHeap datastructure for that, so that we  can change 
+            priority and simulate according to the algorithm needs. It have a pointer 
+            to Process item, interger for priority of the node ad its datamember.
+            
+7)ReadyQueue:   ReadyQueue this implement the function and logic of the minHeap, it
+            has Size(to store the current no. of nodes), Capacity(int to store maximum
+            no. of node can be store, it can be incresed its capacity once 
+            size <= capicity). ReadyQueue is a friendclass of ReadyQueueNode.
+
+8)Schedulor:    Its the main class used to implement the logic and algorithm for 
+            scheduling. It has Queue(ReadyQueue), array(Process_Creator), 
+            Table(TableList), algo(string to store which algorithmis to implement),
+            num_process(int) as its datamember and function that are used to implement
+            alorithm thats are: FCFS, CFS, RR and a function to print process details.
+            
+9)Simulator:    Its is used to control the whole simulation takes input from the 
+            Main function and create a schedulor, ranomly alloctae no. of process.txt 
+            and status.txt
+
+
+Now moving on How is algorithm are implement using minHeap.
+First FCFS: For FCFS scheduling is a normal scheduling that use a ReadyQueue that is
+a fist come fist serve logic. for this we can implement this by using arrival time as
+the the priority variable in minHeap.
+
+For RR: use a timeslice or quantum time logic that is a process can use the cpu atmax 
+for a predefined limited time that is known as quantum afterthat if process still needs
+the CPU the it can go to the end of scheduling queue. Now for implementing it we first 
+intialise the minHeap nodes with the arrival time and if a process needs more time then
+it will reinset in the minHeap with priority update to the time at which it leave the cpu.
+
+for CFS: in completely fair scheduling it uses a red-black tree data structure to store
+process, that is just like a minheap, but the innterseting part is it uses time quatum 
+like RR but its time quantum is depends on number of process currently in th ReadyQueue 
+or no. of runable Process. This timeslice or quantum is 1/n part of 100% CPU power,
+sometime it can be change if there are too many Process to handle. For ReadyQueue CFS 
+use a variable vruntime for impletement RB tree, it actually the time for which that 
+process ran on the CPU, so say a process is intreptedd in between due to some IO call
+or wait call or anyother reason then in CFS this process will reinsert in thr RB tree 
+with a new vruntime+=time it ran on cpu; so vruntime increase monotomically.
+and as vruntime is the time a proccess ran in cpu every new procees has the higher 
+priority in RB tree.
+to inmplement CFS using minHeap we first initialise priority variable to 0 for every
+new incoming process. then if a process reenter in minheap its prioity increse by 
+the term of it's cpu usage.
+
+
+For running program you have to compile it using g++ compiler version 6.3.0-1
+then run the executable file.
+Then if you see on screen something like this
+
+____________________________________________________________
+____________________________________________________________
+                 Welcome to Avadhesh Kumar's 
+            CPU Scheduling Algorithm Simulator
+____________________________________________________________
+____________________________________________________________
+
+Enter Simulation time(in milliseconds)
+Name of Scheduling algorithm from given:
+        First Come First Serve (FCFS)
+        Round Robin
+        Completely Fair Scheduler (CFS)
+Time quantum in case of Round Robin
+
+then the program compile succesfully. Now you have to give input: Simulation time that
+will in milliseconds then the Algorithm and if you choose Round Robin(RR), .then you
+have to also give the time quantum for that.
+
+if any issue in runing a program and want to understand it.
+contact 
+avadheshkumarajay@gmail.com
+avadhe96_soe@jnu.ac.in
